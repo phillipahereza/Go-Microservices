@@ -3,7 +3,7 @@ package dbclient
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/phillipahereza/go-microservices/model"
+	"github.com/phillipahereza/go_microservices/model"
 	bolt "go.etcd.io/bbolt"
 	"log"
 	"strconv"

@@ -3,7 +3,7 @@ package service
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
-	"github.com/phillipahereza/go-microservices/accountservice/dbclient"
+	"github.com/phillipahereza/go_microservices/accountservice/dbclient"
 	"net/http"
 	"strconv"
 )

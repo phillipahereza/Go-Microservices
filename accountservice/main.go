@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-	"github.com/phillipahereza/go-microservices/accountservice/dbclient"
-	"github.com/phillipahereza/go-microservices/accountservice/service"
+	"github.com/phillipahereza/go_microservices/accountservice/dbclient"
+	"github.com/phillipahereza/go_microservices/accountservice/service"
 )
 
 var appName = "accountservice"
