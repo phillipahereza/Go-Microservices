@@ -28,7 +28,25 @@ func (bc *BoltClient) OpenBoltDb() {
 }
 
 func (bc *BoltClient) QueryAccount(accountId string) (model.Account, error) {
-	return model.Account{}, nil
+	account := model.Account{}
+
+	err := bc.boltDB.View(func(tx *bolt.Tx) error {
+		b := tx.Bucket([]byte("AccountBucket"))
+
+		accountBytes := b.Get([]byte(accountId))
+
+		if accountBytes == nil {
+			return fmt.Errorf("No account found for " + accountId)
+		}
+
+		json.Unmarshal(accountBytes, &account)
+		return nil
+	})
+
+	if err != nil {
+		return model.Account{}, err
+	}
+	return account, nil
 }
 
 func (bc *BoltClient) Seed() {
