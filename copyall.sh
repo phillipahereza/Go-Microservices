@@ -6,7 +6,7 @@ cd accountservice || exit;go build -o accountservice-linux-amd64;echo built $(pw
 
 export GOOS=darwin
 
-docker build -t someprefix/accountservice accountservice/
+docker build -t ahereza/accountservice accountservice/
 
 docker service rm accountservice
 docker service create --name=accountservice --replicas=1 --network=my_network -p=6767:6767 someprefix/accountservice

@@ -92,3 +92,4 @@ fabric.properties
 
 /accounts.db
 /accountservice/accountservice-linux-amd64
+!/.env
