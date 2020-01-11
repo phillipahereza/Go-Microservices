@@ -18,4 +18,10 @@ var routes = Routes{
 		"/accounts/{accountId}",
 		GetAccount,
 	},
+	Route{
+		Name:        "HealthCheck",
+		Method:      "GET",
+		Pattern:     "/health",
+		HandlerFunc: HealthCheck,
+	},
 }

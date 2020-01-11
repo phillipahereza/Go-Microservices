@@ -13,6 +13,7 @@ type IBoltClient interface {
 	OpenBoltDb()
 	QueryAccount(accountId string) (model.Account, error)
 	Seed()
+	Check() bool
 }
 
 type BoltClient struct {
@@ -84,4 +85,8 @@ func (bc *BoltClient) seedAccounts() {
 		})
 	}
 	fmt.Printf("Seeded %v fake accounts...\n", total)
+}
+
+func (bc *BoltClient) Check() bool {
+	return bc.boltDB != nil
 }

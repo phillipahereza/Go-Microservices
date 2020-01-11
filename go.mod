@@ -7,4 +7,5 @@ require (
 	github.com/smartystreets/goconvey v1.6.4
 	github.com/stretchr/testify v1.4.0
 	go.etcd.io/bbolt v1.3.3
+	gopkg.in/h2non/gock.v1 v1.0.15
 )
