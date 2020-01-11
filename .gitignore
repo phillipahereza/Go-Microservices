@@ -90,3 +90,5 @@ fabric.properties
 
 .idea/
 
+/accounts.db
+/accountservice/accountservice-linux-amd64
