@@ -1,16 +1,16 @@
 package service
 
 import (
+	"encoding/json"
+	"fmt"
 	"github.com/phillipahereza/go_microservices/accountservice/dbclient"
 	"github.com/phillipahereza/go_microservices/common/messaging"
 	"github.com/phillipahereza/go_microservices/model"
 	. "github.com/smartystreets/goconvey/convey"
-	"testing"
-	"net/http/httptest"
-	"fmt"
-	"encoding/json"
-	"gopkg.in/h2non/gock.v1"
 	"github.com/stretchr/testify/mock"
+	"gopkg.in/h2non/gock.v1"
+	"net/http/httptest"
+	"testing"
 	"time"
 )
 
@@ -34,8 +34,7 @@ func TestGetAccount(t *testing.T) {
 		Reply(200).
 		BodyString(`{"quote":"May the source be with you. Always.","ipAddress":"10.0.0.5:8080","language":"en"}`)
 
-
-	mockRepo.On("QueryAccount", "123").Return(model.Account{Id:"123", Name:"Person_123"}, nil)
+	mockRepo.On("QueryAccount", "123").Return(model.Account{Id: "123", Name: "Person_123"}, nil)
 	mockRepo.On("QueryAccount", "456").Return(model.Account{}, fmt.Errorf("Some error"))
 	DBClient = mockRepo
 
@@ -96,7 +95,7 @@ func TestGetAccountNoQuote(t *testing.T) {
 		Reply(500)
 
 	mockRepo := &dbclient.MockBoltClient{}
-	mockRepo.On("QueryAccount", "123").Return(model.Account{Id:"123", Name:"Person_123"}, nil)
+	mockRepo.On("QueryAccount", "123").Return(model.Account{Id: "123", Name: "Person_123"}, nil)
 
 	Convey("Given a HTTP request for /accounts/123", t, func() {
 		req := httptest.NewRequest("GET", "/accounts/123", nil)
@@ -120,7 +119,7 @@ func TestGetAccountNoQuote(t *testing.T) {
 
 func TestNotificationIsSentForVIPAccount(t *testing.T) {
 
-	mockRepo.On("QueryAccount", "10000").Return(model.Account{Id:"10000", Name:"Person_10000"}, nil)
+	mockRepo.On("QueryAccount", "10000").Return(model.Account{Id: "10000", Name: "Person_10000"}, nil)
 	DBClient = mockRepo
 
 	mockMessagingClient.On("PublishOnQueue", anyByteArray, anyString).Return(nil)
@@ -133,8 +132,9 @@ func TestNotificationIsSentForVIPAccount(t *testing.T) {
 			NewRouter().ServeHTTP(resp, req)
 			Convey("Then the response should be a 200 and the MessageClient should have been invoked", func() {
 				So(resp.Code, ShouldEqual, 200)
-				time.Sleep(time.Millisecond * 10)    // Sleep since the Assert below occurs in goroutine
+				time.Sleep(time.Millisecond * 10) // Sleep since the Assert below occurs in goroutine
 				So(mockMessagingClient.AssertNumberOfCalls(t, "PublishOnQueue", 1), ShouldBeTrue)
 			})
-		})})
+		})
+	})
 }

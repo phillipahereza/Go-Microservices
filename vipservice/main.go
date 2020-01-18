@@ -6,6 +6,7 @@ import (
 	"github.com/phillipahereza/go_microservices/common/config"
 	"github.com/phillipahereza/go_microservices/common/messaging"
 	"github.com/phillipahereza/go_microservices/vipservice/service"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"github.com/streadway/amqp"
 	"os"
@@ -29,7 +30,7 @@ func init() {
 }
 
 func main() {
-	fmt.Println("Starting " + appName + "...")
+	logrus.Infoln("Starting " + appName + "...")
 
 	config.LoadConfigurationFromBranch(viper.GetString("configServerUrl"), appName, viper.GetString("profile"), viper.GetString("configBranch"))
 	initializeMessaging()
@@ -44,11 +45,12 @@ func main() {
 }
 
 func onMessage(delivery amqp.Delivery) {
-	fmt.Printf("Got a message: %v\n", string(delivery.Body))
+	logrus.Infof("Got a message: %v\n", string(delivery.Body))
 }
 
 func initializeMessaging() {
 	if !viper.IsSet("amqp_server_url") {
+		logrus.Errorln("No 'broker_url' set in configuration, cannot start")
 		panic("No 'broker_url' set in configuration, cannot start")
 	}
 	messagingClient = &messaging.MessagingClient{}
@@ -76,7 +78,7 @@ func handleSigterm(handleExit func()) {
 
 func failOnError(err error, msg string) {
 	if err != nil {
-		fmt.Printf("%s: %s", msg, err)
+		logrus.Errorf("%s: %s", msg, err)
 		panic(fmt.Sprintf("%s: %s", msg, err))
 	}
 }

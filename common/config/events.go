@@ -1,11 +1,11 @@
 package config
 
 import (
-	"log"
-	"github.com/streadway/amqp"
 	"encoding/json"
-	"strings"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
+	"github.com/streadway/amqp"
+	"strings"
 )
 
 func HandleRefreshEvent(d amqp.Delivery) {
@@ -14,10 +14,10 @@ func HandleRefreshEvent(d amqp.Delivery) {
 	updateToken := &UpdateToken{}
 	err := json.Unmarshal(body, updateToken)
 	if err != nil {
-		log.Printf("Problem parsing UpdateToken: %v", err.Error())
+		logrus.Printf("Problem parsing UpdateToken: %v", err.Error())
 	} else {
 		if strings.Contains(updateToken.DestinationService, consumerTag) {
-			log.Println("Reloading Viper config from Spring Cloud Config server")
+			logrus.Println("Reloading Viper config from Spring Cloud Config server")
 
 			// Consumertag is same as application name.
 			LoadConfigurationFromBranch(
@@ -31,9 +31,9 @@ func HandleRefreshEvent(d amqp.Delivery) {
 
 // {"type":"RefreshRemoteApplicationEvent","timestamp":1494514362123,"originService":"config-server:docker:8888","destinationService":"xxxaccoun:**","id":"53e61c71-cbae-4b6d-84bb-d0dcc0aeb4dc"}
 type UpdateToken struct {
-	Type string `json:"type"`
-	Timestamp int `json:"timestamp"`
-	OriginService string `json:"originService"`
+	Type               string `json:"type"`
+	Timestamp          int    `json:"timestamp"`
+	OriginService      string `json:"originService"`
 	DestinationService string `json:"destinationService"`
-	Id string `json:"id"`
+	Id                 string `json:"id"`
 }

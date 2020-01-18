@@ -3,9 +3,9 @@ package config
 import "testing"
 import (
 	. "github.com/smartystreets/goconvey/convey"
-	"gopkg.in/h2non/gock.v1"
 	"github.com/spf13/viper"
 	"github.com/streadway/amqp"
+	"gopkg.in/h2non/gock.v1"
 )
 
 var SERVICE_NAME = "accountservice"

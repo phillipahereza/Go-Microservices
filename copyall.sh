@@ -15,9 +15,9 @@ cp healthchecker/healthchecker-linux-amd64 vipservice/
 docker build -t ahereza/accountservice accountservice/
 docker push ahereza/accountservice:latest
 docker service rm accountservice
-docker service create --name=accountservice --replicas=1 --network=my_network -p=6767:6767 ahereza/accountservice
+docker service create --log-driver=gelf --log-opt gelf-address=udp://192.168.99.112:12202 --log-opt gelf-compression-type=none --name=accountservice --replicas=1 --network=my_network -p=6767:6767 ahereza/accountservice
 
 docker build -t ahereza/vipservice vipservice/
 docker push ahereza/vipservice:latest
 docker service rm vipservice
-docker service create --name=vipservice --replicas=1 --network=my_network ahereza/vipservice
+docker service create --log-driver=gelf --log-opt gelf-address=udp://192.168.99.112:12202 --log-opt gelf-compression-type=none --name=vipservice --replicas=1 --network=my_network -p=6868:6868 ahereza/vipservice

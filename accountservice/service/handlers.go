@@ -1,17 +1,18 @@
 package service
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/gorilla/mux"
 	"github.com/phillipahereza/go_microservices/accountservice/dbclient"
 	"github.com/phillipahereza/go_microservices/common/messaging"
 	"github.com/phillipahereza/go_microservices/common/util"
 	"github.com/phillipahereza/go_microservices/model"
-	"net/http"
-	"github.com/gorilla/mux"
-	"encoding/json"
-	"fmt"
-	"time"
+	"github.com/sirupsen/logrus"
 	"io/ioutil"
+	"net/http"
 	"strconv"
+	"time"
 )
 
 var DBClient dbclient.IBoltClient
@@ -20,13 +21,15 @@ var isHealthy = true
 
 var client = &http.Client{}
 
+var LOGGER = logrus.Logger{}
+
 func init() {
 	var transport http.RoundTripper = &http.Transport{
 		DisableKeepAlives: true,
 	}
 	client.Transport = transport
+	LOGGER.Infof("Successfully initialized transport")
 }
-
 
 func GetAccount(w http.ResponseWriter, r *http.Request) {
 	// Read the 'accountId' path parameter from the mux map
@@ -38,12 +41,12 @@ func GetAccount(w http.ResponseWriter, r *http.Request) {
 
 	// If err, return a 404
 	if err != nil {
-		fmt.Println("Some error occured serving " + accountId + ": " + err.Error())
+		LOGGER.Errorln("Some error occured serving " + accountId + ": " + err.Error())
 		w.WriteHeader(http.StatusNotFound)
 		return
 	}
 
-	notifyVIP(account)   // Send VIP notification concurrently.
+	notifyVIP(account) // Send VIP notification concurrently.
 
 	// NEW call the quotes-service
 	quote, err := getQuote()
@@ -61,7 +64,7 @@ func notifyVIP(account model.Account) {
 		go func(account model.Account) {
 			vipNotification := model.VipNotification{AccountId: account.Id, ReadAt: time.Now().UTC().String()}
 			data, _ := json.Marshal(vipNotification)
-			fmt.Printf("Notifying VIP account %v\n", account.Id)
+			LOGGER.Infoln("Notifying VIP account %v\n", account.Id)
 			err := MessagingClient.PublishOnQueue(data, "vip_queue")
 			if err != nil {
 				fmt.Println(err.Error())
@@ -83,8 +86,6 @@ func getQuote() (model.Quote, error) {
 		return model.Quote{}, fmt.Errorf("Some error")
 	}
 }
-
-
 
 func HealthCheck(w http.ResponseWriter, r *http.Request) {
 	// Since we're here, we already know that HTTP service is up. Let's just check the state of the boltdb connection

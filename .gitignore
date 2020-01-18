@@ -102,3 +102,5 @@ healthchecker/healthchecker-linux-amd64
 /accountservice/healthchecker-linux-amd64
 /support/config-server/.gradle/
 
+/gelftail/gelftail-linux-amd64
+/gelftail/token.txt

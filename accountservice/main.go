@@ -2,11 +2,11 @@ package main
 
 import (
 	"flag"
-	"fmt"
 	"github.com/phillipahereza/go_microservices/accountservice/dbclient"
 	"github.com/phillipahereza/go_microservices/accountservice/service"
 	"github.com/phillipahereza/go_microservices/common/config"
 	"github.com/phillipahereza/go_microservices/common/messaging"
+	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"os"
 	"os/signal"
@@ -28,7 +28,8 @@ func init() {
 }
 
 func main() {
-	fmt.Printf("Starting %v\n", appName)
+	logrus.SetFormatter(&logrus.JSONFormatter{})
+	logrus.Infof("Starting %v\n", appName)
 
 	config.LoadConfigurationFromBranch(
 		viper.GetString("configServerUrl"),

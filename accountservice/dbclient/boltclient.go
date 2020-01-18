@@ -53,7 +53,7 @@ func (bc *BoltClient) QueryAccount(accountId string) (model.Account, error) {
 func (bc *BoltClient) Seed() {
 	bc.initializeBucket()
 	bc.seedAccounts()
-	
+
 }
 
 func (bc *BoltClient) initializeBucket() {
@@ -68,9 +68,9 @@ func (bc *BoltClient) initializeBucket() {
 
 func (bc *BoltClient) seedAccounts() {
 	total := 100
-	for i := 0; i< total; i++ {
+	for i := 0; i < total; i++ {
 		key := strconv.Itoa(10000 + i)
-		
+
 		acc := model.Account{
 			Id:   key,
 			Name: "Person_" + strconv.Itoa(i),
