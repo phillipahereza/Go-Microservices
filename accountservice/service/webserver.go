@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func StartWebserver(port string) {
+func StartWebServer(port string) {
 	log.Println("Starting HTTP service at " + port)
 	r := NewRouter()
 	http.Handle("/", r)
