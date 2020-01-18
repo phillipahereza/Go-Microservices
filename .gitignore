@@ -95,3 +95,10 @@ fabric.properties
 accountservice/accounts.db
 healthchecker/healthchecker-linux-amd64
 /accountservice/accounts.db
+/vipservice/vipservice-linux-amd64
+/vipservice/healthchecker-linux-amd64
+/support/config-server/server.jks
+/support/config-server/build/
+/accountservice/healthchecker-linux-amd64
+/support/config-server/.gradle/
+
